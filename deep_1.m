@@ -46,11 +46,11 @@ d                    = x*cosd(angle)/c;              %unit delay
 t                    = (0:N-1)*Ts;                       %time matrix
 matrix           = zeros(N,m);                      %initialising noise included signal
 
-num_decibels = 3;
+num_decibels = 1000;
 f_mat=zeros(num_decibels,m);
 
 for SNR_variable = 1:num_decibels
-        SNR              = -SNR_variable;                                   %signal to noise ratio
+        SNR              = -SNR_variable/10;                                   %signal to noise ratio
         SNR_weight = 10^(-1*SNR*0.05);          %SNR noise weight
         %% bringing about the natural delay
         y = sin(2*pi*f*t);                                       %generating the ideal sine wave
@@ -80,10 +80,10 @@ for SNR_variable = 1:num_decibels
     f_mat(SNR_variable,m+1) = 1;    % the final value indicates whether it is yes/no
 end
 
-save('deep_input.mat','f_mat');
+save('/Users/vrsreeganesh/Desktop/Sonar_repo/deep_input.mat','f_mat');
 
-
-
+cout = 'done'
+size____ = size(f_mat)
 
 
 
