@@ -80,9 +80,8 @@ for SNR_variable = 1:num_decibels
     f_mat(SNR_variable,m+1) = 1;    % the final value indicates whether it is yes/no
 end
 
-% save('deep_input.mat','f_mat');
+save('deep_input.mat','f_mat');
 
-% save('deep_input','f_mat')
 
 
 
