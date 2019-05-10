@@ -8,3 +8,8 @@ The basic principle behind towed array SONAR is beamforming. (Beamforming is one
 
 This report is  simulation of reception beamforming under different conditions and environments and aims to understand the basics of beamforming.
 
+8th May 2019
+Here's the thing, surpervised deep learning is  sort of like choosing from multiple answers. So, you can't just expect it to output a number. It distributes probabilities for each of those outputs and the highest one is often chosen. 
+
+The input is going to the first layer must have 32 activations. The finale code must be trained for at least 10 angles with each probabilities. 
+
