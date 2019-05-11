@@ -84,6 +84,9 @@ for SNR_variable = 1:num_decibels
 end
 
 save('/Users/vrsreeganesh/Desktop/Sonar_repo/training_true.mat','f_mat');
+save('/Users/vrsreeganesh/Desktop/Sonar_repo/label_true.mat','label_matrix');
+
+
 
 cout = 'done'
 size_ = size(f_mat)

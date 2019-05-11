@@ -13,11 +13,17 @@ import matplotlib.pyplot as plt
 from scipy.io import loadmat
 
 ## defining the constants
-load_true = loadmat('training_true.at')
-true_matrix = load_true['f_mat']
+load_true = loadmat('training_true.mat')
+true_matrix = load_true['f_mat'] # loading the training set for true values
 
 load_false = loadmat('training_false.mat')
-false_matrix = load_false['f_mat']
+false_matrix = load_false['f_mat'] # loading the training set for false values
+
+load_label_true = loadmat('label_true.mat')
+true_label_matrix = load_label_true['label_matrix']
+
+load_label_false = loadmat('label_false.mat')
+true_label_matrix = load_label_false['label_matrix']
 
 ## basic setup
 os.system('clear')
