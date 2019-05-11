@@ -10,6 +10,14 @@ Created on Wed May  8 20:48:04 2019
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.io import loadmat
+
+## defining the constants
+load_true = loadmat('training_true.at')
+true_matrix = load_true['f_mat']
+
+load_false = loadmat('training_false.mat')
+false_matrix = load_false['f_mat']
 
 ## basic setup
 os.system('clear')
