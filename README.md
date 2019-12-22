@@ -12,15 +12,15 @@ Objective 3 : Beamforming in the frequency domain. (Narrowband beamformer)
 Status      : Done.  
 Objective 4 : Simulate beam pattern by shifting theta  
 Status      : Done.  
-Objective 5 : SIMULATE BEAM PATTERN FOR DIFFERENT FREQUENCIES ON AN ARRAY DESIGNED FOR A CERTAIN FREQUENCY  
+Objective 5 : Observe the effects of signals of different frequencies on an array designed for a specific frequency  
 Status      : Done.  
-Objective 6 : EFFECT OF SNR ON BEAM PATTERN  
+Objective 6 : Effect of SNR on beampattern  
 Status      : Done.  
-Objective 7 : TO GET THE ORIGINAL SIGNAL FROM THE BEAM FORMED OUTPUT  
+Objective 7 : Retrieve original signal from beamformed output    
 Status      : Done.  
-Objective 8 : SIMULATE BROADBAND BEAMFORMING  
+Objective 8 : Simulate broadband beamforming    
 Status      : Done.  
-Objective 9 : Apply the chebyshev windowing in beamforming  
+Objective 9 : Chebyshev windowing in beamforming  
 Status      : Done.  
-Obective > 9 : Test code  
+Any code other than the ones mentioned above : Test code  
 Status  : Don't bother
