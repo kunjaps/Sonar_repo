@@ -7,7 +7,7 @@ clc;
 close all;
 
 %% initialising variables
-angle   = 120;                                          %input wave angle
+angle   = 30;                                          %input wave angle
 f            = 2000;                                       %input wave frequency
 Fs         = 12800;                                     %sampling frequency
 Ts         = 1/Fs;                                        %sampling interval

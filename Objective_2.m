@@ -1,6 +1,6 @@
 %% Simulate the input received by a 4 element array
 % role : important
-status : complete
+% status : complete
 
 %% basic setup
 clc;
@@ -8,7 +8,7 @@ close all;
 
 %% Initialising variables
 f            = 200; %the main frequency
-Fs         = 12800; %sampling frequency
+Fs         = 25600; %sampling frequency
 Ts          = 1/Fs; %sampling interval
 N           = 128;    %number of intervals
 
@@ -19,7 +19,7 @@ lambda   = c/f;                                         %wavelength of incoming 
 x             = lambda/2;                              %sensor interspacing
 d             = x*cosd(angle)/c;                   %unit delay
 
-SNR        = 10;                                       %signal to noise ratio
+SNR        = 1000;                                       %signal to noise ratio
 SNR_weight = 10^(-1*SNR*0.05);         %SNR noise weight
 
 t          = (0:N-1)*Ts;                               %time matrix

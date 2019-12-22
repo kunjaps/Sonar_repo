@@ -20,18 +20,19 @@ load_false = loadmat('training_false.mat')
 false_matrix = load_false['f_mat'] # loading the training set for false values
 
 load_label_true = loadmat('label_true.mat')
-true_label_matrix = load_label_true['label_matrix']
+true_label_matrix = load_label_true['label_matrix'] # loading the true labels
 
 load_label_false = loadmat('label_false.mat')
-true_label_matrix = load_label_false['label_matrix']
+true_label_matrix = load_label_false['label_matrix'] # loading the false labels
 
 ## basic setup
 os.system('clear')
 
 # --------------------------------REPORT--------------------------------------
 # 1. All functions have been defined
-# 2. Now, we need to find input the matrix designed
+# 2. input matrices have been defined
 # 3. Hyper parameter tuning is not done
+# 4. The steered values cannot be taken since they're imaginary. So the reshaping of the input is necessary
 
 # ------------------------------ Variables and Objects ------------
 # linear cache contains A,W and b
@@ -41,27 +42,29 @@ os.system('clear')
 
 # -------------------------------Bug fixes-------------------------
 # define relu_backward and sigmoid_backward 
-# ee randu function ilekku pass cheyyunna activation_backward enthaanennu ariyanam
+# 
 
 ###############################################################################
 
-def initialize_parameters_deep(layer_dims):
+def initialize_parameters_deep(layers_dims):
     
     ## parameters is a dictionary. It is an array of sorts that doesn't have
     # a specific position. It is accessed using it's labels
     
     parameters = {}
-    L = len(layer_dims)
+    L = len(layers_dims)
     
     for l in range(1, L):
-        parameters['W' + str(l)] = np.random.randn(layer_dims[l],layer_dims[l-1])*0.01 
-        parameters['b' + str(l)] = np.zeros([layer_dims[l],1])
+        parameters['W' + str(l)] = np.random.randn(layers_dims[l],layers_dims[l-1])*0.01 
+        parameters['b' + str(l)] = np.zeros([layers_dims[l],1])
         
         # notice that we are initialising W with random small numbers
         # b is initialised with zeros
         
-        assert(parameters['W' + str(l)].shape == (layer_dims[l], layer_dims[l-1]))
-        assert(parameters['b' + str(l)].shape == (layer_dims[l], 1))
+        assert(parameters['W' + str(l)].shape == (layers_dims[l], layers_dims[l-1]))
+        assert(parameters['b' + str(l)].shape == (layers_dims[l], 1))
+        
+        
 
         
     return parameters
@@ -93,14 +96,50 @@ def linear_forward(A, W, b):
 
 ###############################################################################
 
-def sigmoid_function(x):
-    return 1/(1+np.exp(-x))
+#def sigmoid_function(x):
+#    y_sigmoid = 1/(1+np.exp(-x))
+#    return y_sigmoid,x
+
+def sigmoid(Z):
+    """
+    Implements the sigmoid activation in numpy
+    
+    Arguments:
+    Z -- numpy array of any shape
+    
+    Returns:
+    A -- output of sigmoid(z), same shape as Z
+    cache -- returns Z as well, useful during backpropagation
+    """
+    
+    A = 1/(1+np.exp(-Z))
+    cache = Z
+    
+    return A, cache
 
 ###############################################################################
 
-def relu(x):
-    return max(0,x)
+#def relu(x):
+#    # np.maximum(x, 0, x) this is like super fast but input loses its values
+#    y = x * (x>0)
+#    return y,x
+
+def relu(Z):
+    """
+    Implement the RELU function.
+    Arguments:
+    Z -- Output of the linear layer, of any shape
+    Returns:
+    A -- Post-activation parameter, of the same shape as Z
+    cache -- a python dictionary containing "A" ; stored for computing the backward pass efficiently
+    """
     
+    A = Z * (Z>0)
+    
+    assert(A.shape == Z.shape)
+    
+    cache = Z 
+    return A, cache    
 
 ###############################################################################    
 def linear_activation_forward(A_prev, W, b, activation):
@@ -125,7 +164,7 @@ def linear_activation_forward(A_prev, W, b, activation):
         # Inputs: "A_prev, W, b". Outputs: "A, activation_cache".
         ### START CODE HERE ### (≈ 2 lines of code)
         Z, linear_cache = linear_forward(A_prev,W,b)
-        A, activation_cache = sigmoid_function(Z)
+        A, activation_cache = sigmoid(Z)
         ### END CODE HERE ###
     
     elif activation == "relu":
@@ -158,16 +197,16 @@ def L_model_forward(X, parameters):
 
     caches = [] 
     A = X
-    L = len(parameters) # number of layers in the neural network
+    L = len(layers_dims) # number of layers in the neural network
     
     # Implement the relu ones till L-1. Add "cache" to the "caches" list.
-    for l in range(1, L):
+    for l in range(1, L-1): 
         A_prev = A 
-        A, cache = linear_activation_forward(A_prev,parameters['W' + str(l)],parameters['b' + str(l)],"relu")
+        A, cache = linear_activation_forward(A_prev,parameters["W" + str(l)],parameters["b" + str(l)],"relu")
         caches.append(cache)
     
     # The last sigmoid. And add "cache" to the "caches" list.
-    AL, cache = linear_activation_forward(A,parameters['W' + str(l+1)],parameters['b' + str(l+1)],"sigmoid")
+    AL, cache = linear_activation_forward(A,parameters['W' + str(L-1)],parameters['b' + str(L-1)],"sigmoid")
     caches.append(cache)
     
     assert(AL.shape == (1,X.shape[1]))
@@ -226,20 +265,59 @@ def linear_backward(dZ, cache):
 
 ###############################################################################
     
-def relu_backward(dA,activation_cache):
-    gZ = 1 / (1 + np.exp(-activation_cache)) * (1 - (1 / (1 + np.exp(-activation_cache))))
-    # and activation cache apparently contains z
-    dZ = np.dot(dA,gZ)
+#def relu_backward(dA,activation_cache):
+#    gZ = 1 / (1 + np.exp(-activation_cache)) * (1 - (1 / (1 + np.exp(-activation_cache))))
+#    # and activation cache apparently contains z
+#    dZ = np.dot(dA,gZ)
+#    return dZ
+
+def relu_backward(dA, cache):
+    """
+    Implement the backward propagation for a single RELU unit.
+    Arguments:
+    dA -- post-activation gradient, of any shape
+    cache -- 'Z' where we store for computing backward propagation efficiently
+    Returns:
+    dZ -- Gradient of the cost with respect to Z
+    """
+    
+    Z = cache
+    dZ = np.array(dA, copy=True) # just converting dz to a correct object.
+    
+    # When z <= 0, you should set dz to 0 as well. 
+    dZ[Z <= 0] = 0
+    
+    assert (dZ.shape == Z.shape)
+    
     return dZ
 ###############################################################################
 
-def sigmoid_backward(dA,activation_cache):
-    # you can either use the sigmoid function without the derivative part as I
-    # just read that the derivative of the relu function is approximately sigmoid
-    gZ = 1 / (1 + np.exp(-activation_cache))
-    dZ = np.dot(dA,gZ)
-    return dZ
+#def sigmoid_backward(dA,activation_cache):
+ #   # you can either use the sigmoid function without the derivative part as I
+  #  # just read that the derivative of the relu function is approximately sigmoid
+#    gZ = 1 / (1 + np.exp(-activation_cache))
+#    dZ = np.dot(dA,gZ)
+#    return dZ
+
+
+def sigmoid_backward(dA, cache):
+    """
+    Implement the backward propagation for a single SIGMOID unit.
+    Arguments:
+    dA -- post-activation gradient, of any shape
+    cache -- 'Z' where we store for computing backward propagation efficiently
+    Returns:
+    dZ -- Gradient of the cost with respect to Z
+    """
     
+    Z = cache
+    
+    s = 1/(1+np.exp(-Z))
+    dZ = dA * s * (1-s)
+    
+    assert (dZ.shape == Z.shape)
+    
+    return dZ    
 ###############################################################################
 def linear_activation_backward(dA, cache, activation):
     """
@@ -346,7 +424,7 @@ def update_parameters(parameters, grads, learning_rate):
     
 
 ###############################################################################
-layers_dims = [32, 20, 7, 5, 1]
+
 
 def L_layer_model(X, Y, layers_dims, learning_rate = 0.0075, num_iterations = 3000, print_cost=False):#lr was 0.009
     """
@@ -364,7 +442,7 @@ def L_layer_model(X, Y, layers_dims, learning_rate = 0.0075, num_iterations = 30
     parameters -- parameters learnt by the model. They can then be used to predict.
     """
 
-    np.random.seed(1)
+
     costs = []                         # keep track of cost
     
     # Parameters initialization. (≈ 1 line of code)
@@ -417,7 +495,14 @@ def L_layer_model(X, Y, layers_dims, learning_rate = 0.0075, num_iterations = 30
     ###############################################################################
     ###############################################################################
     
-    
+# CODE begins
+
+layers_dims = [32, 20, 7, 5, 1]         # laying out the plan for the structure
+#layers_dims = [32,20,1]
+#initialize_parameters_deep(layers_dims) # building the structure and initialising them
+train_x = true_matrix
+train_y = true_label_matrix
+parameters = L_layer_model(train_x, train_y,layers_dims, num_iterations = 2, print_cost = True)
     
     
     

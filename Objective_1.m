@@ -8,11 +8,11 @@ close all;
 
 %% Initialising variables
 f                   = 2000; %the main frequency
-Fs                = 12800;  %sampling frequency
+Fs                = 25600;  %sampling frequency
 Ts                 = 1/Fs;  %sampling interval
 N                  = 128;   %number of intervals
 
-SNR             = 10;                                     %signal to noise ratio
+SNR             = 1000000;                                     %signal to noise ratio
 SNR_weight = 10^(-1*SNR*0.05);          %SNR multiplying factor
 
 t          = (0:N-1)*Ts;                                 %time matrix
