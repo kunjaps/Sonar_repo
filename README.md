@@ -28,3 +28,4 @@ Status  : Don't bother
 Test_1.py : The python code for learning basic graphing
 Test_2.py : Simulating a noisy sine wave
 test_3.py : Creating the output of a sensor array picking up the signature of a single frequency target
+test_4.py : Serialising the output of a sensor array 
