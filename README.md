@@ -24,3 +24,7 @@ Objective 9 : Chebyshev windowing in beamforming
 Status      : Done.  
 Any code other than the ones mentioned above : Test code  
 Status  : Don't bother
+
+Test_1.py : The python code for learning basic graphing
+Test_2.py : Simulating a noisy sine wave
+test_3.py : Creating the output of a sensor array picking up the signature of a single frequency target
